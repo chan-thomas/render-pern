@@ -47,7 +47,7 @@ function App() {
   const getAllUsers = () => {
     Axios({
       method: "GET",
-      url: "http://localhost:4002/getUsers",
+      url: "/getUsers",
     }).then((res) => {
       console.log(res.data);
       setUserList(res.data);
