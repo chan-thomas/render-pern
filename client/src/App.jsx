@@ -63,7 +63,7 @@ function App() {
       url: "http://localhost:4002/logout",
     }).then((res) => {
       console.log(res.data);
-      setMessage(res.data);
+      setMessage(res.data.message);
     });
   }
 

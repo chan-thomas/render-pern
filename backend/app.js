@@ -5,6 +5,10 @@ const passport = require("passport")
 const cookieParser = require("cookie-parser")
 const session = require("express-session")
 const path = require('path')
+const logger = require('./config/logger')
+
+
+
 //----------------------------------------- END OF IMPORTS---------------------------------------------------
 const app = express()
 const db = require('./db')
@@ -37,6 +41,27 @@ app.use(passport.session())
 require("./auth/passportConfig")(passport)
 
 //----------------------------------------- END OF MIDDLEWARE---------------------------------------------------
+app.get('/logout', (req, res)=>{
+    req.logout((err) => {
+        if (err) { return next(err); }
+        res.json({message: 'bye'});
+      });
+})
+app.post('/login',
+    passport.authenticate('local',
+        {
+            failureMessage: true,  //Turn on failureMessage
+            failureRedirect: '/fail'
+        }),
+    (req, res) => {
+        res.json({ authorized: true })
+    })
+ 
+app.get('/fail', (req, res) => {
+    console.log(req.session)
+    req.session.messages = []// reset/clear out the failureMessage 
+    res.send('Login fail')
+})
 
 
 app.get('/', (req, res) => {
@@ -45,16 +70,11 @@ app.get('/', (req, res) => {
 app.get('/getUsers', db.getUsers)
 app.get('/getLoginUser', db.getLoginUser)
 app.post('/register', db.addUser)
-app.post('/login',
-passport.authenticate('local', 
-{ failureMessage:'not good', 
-failureRedirect:'/'}),
- (req, res)=>{
-    res.send('Authorized')
-})
+
+
 
 app.listen(port, () => {
-    console.log(`server is up on port ${port}`)
+    logger.info(`server is up on port ${port}`)
 })
 
 
