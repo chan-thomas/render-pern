@@ -14,8 +14,7 @@ module.exports = function (passport) {
       async (username, password, done) => {
         try {
           const user = await db.authUserByName(username)
-          console.log('after await db.authUserByName');
-          console.log(user);
+          console.log('debug',user);
           if (!user) return done(null, false);
           console.log(`user exists :)`);
           const isMatch = (password == user.password) //await matchPassword(password, user.password);

@@ -37,11 +37,15 @@ function App() {
       method: "GET",
       url: "http://localhost:4002/getLoginUser",
     }).then((res) => {
+      console.log('here getLoginUser', res);
+      console.log('getLoginUser:', res.data);
       if(res.data.username)
         setData(res.data)
-      else
+      else { 
+        console.log('missing data');
         setData(null); 
-      console.log(res.data);
+        console.log('no res.data.username',res.data);
+      }
     });
   }
   const getAllUsers = () => {

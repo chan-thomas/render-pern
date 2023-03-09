@@ -18,6 +18,24 @@ exports.getUsers = (req, res) => {
         res.status(200).json(results.rows);
     })
 }
+exports.getUserById = async (id)=>{
+    const results = await
+        pool.query('SELECT * from users where id = $1', [id])
+    return results.rows[0];
+}
+
+exports.getLoginUser = (req, res) =>{
+    const user = req.user;
+    console.log('sesson user:',user);
+    res.json(user)
+}
+exports.addUser = (req, res) =>{
+    const username = req.body.username;
+    const password = req.body.password;
+    const user= {message:'addUser', username: username, password:password}
+    console.log('sesson user:',user);
+    res.json(user)
+}
 
 exports.authUserByName = async (username) => {
     const results = await
