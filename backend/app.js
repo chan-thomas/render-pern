@@ -6,6 +6,8 @@ const cookieParser = require("cookie-parser")
 const session = require("express-session")
 const path = require('path')
 const logger = require('./config/logger')
+const morgan = require('morgan');
+
 
 
 
@@ -16,12 +18,27 @@ const db = require('./db')
 const port = process.env.PORT || 4002
 const reactClientURL = 'http://localhost:3000' // react client
 
+const morganMiddleware = morgan(
+    'tiny',
+    {
+      stream: {
+        // Configure Morgan to use our custom logger with the http severity
+        write: (message) => logger.http(message.trim()),
+      },
+    }
+  );
+
+
+
 // Let express serve the files in the built React-app's build folder
 app.use(express.static(path.resolve(__dirname, "../client/dist")));
 
 // Middleware
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
+
+app.use(morganMiddleware);
+
 app.use(
     cors({
         origin: reactClientURL, // <-- location of the react app were connecting to
