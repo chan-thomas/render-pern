@@ -21,12 +21,12 @@ const reactClientURL = 'http://localhost:3000' // react client
 const morganMiddleware = morgan(
     'tiny',
     {
-      stream: {
-        // Configure Morgan to use our custom logger with the http severity
-        write: (message) => logger.http(message.trim()),
-      },
+        stream: {
+            // Configure Morgan to use our custom logger with the http severity
+            write: (message) => logger.http(message.trim()),
+        },
     }
-  );
+);
 
 
 
@@ -58,11 +58,11 @@ app.use(passport.session())
 require("./auth/passportConfig")(passport)
 
 //----------------------------------------- END OF MIDDLEWARE---------------------------------------------------
-app.get('/logout', (req, res)=>{
+app.get('/logout', (req, res) => {
     req.logout((err) => {
         if (err) { return next(err); }
-        res.json({message: 'bye'});
-      });
+        res.json({ message: 'bye' });
+    });
 })
 app.post('/login',
     passport.authenticate('local',
@@ -73,7 +73,7 @@ app.post('/login',
     (req, res) => {
         res.json({ authorized: true })
     })
- 
+
 app.get('/fail', (req, res) => {
     console.log(req.session)
     req.session.messages = []// reset/clear out the failureMessage 
@@ -87,8 +87,15 @@ app.get('/', (req, res) => {
 app.get('/getUsers', db.getUsers)
 app.get('/getLoginUser', db.getLoginUser)
 app.post('/register', db.addUser)
-
-
+app.post('/login',
+    passport.authenticate('local',
+        {
+            failureMessage: 'not good',
+            failureRedirect: '/'
+        }),
+    (req, res) => {
+        res.send('Authorized')
+    })
 
 app.listen(port, () => {
     logger.info(`server is up on port ${port}`)

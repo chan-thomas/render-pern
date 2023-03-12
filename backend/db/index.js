@@ -19,22 +19,22 @@ exports.getUsers = (req, res) => {
         res.status(200).json(results.rows);
     })
 }
-exports.getUserById = async (id)=>{
+exports.getUserById = async (id) => {
     const results = await
         pool.query('SELECT * from users where id = $1', [id])
     return results.rows[0];
 }
 
-exports.getLoginUser = (req, res) =>{
+exports.getLoginUser = (req, res) => {
     const user = req.user;
-    logger.debug('sesson user:',user);
+    logger.debug('sesson user:', user);
     res.json(user)
 }
-exports.addUser = (req, res) =>{
+exports.addUser = (req, res) => {
     const username = req.body.username;
     const password = req.body.password;
-    const user= {message:'addUser', username: username, password:password}
-    logger.debug('sesson user:',user);
+    const user = { message: 'addUser', username: username, password: password }
+    logger.debug('sesson user:', user);
     res.json(user)
 }
 
